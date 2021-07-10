@@ -5,7 +5,7 @@ import com.example.mycommunity.dto.GithubUser;
 import com.example.mycommunity.mapper.UserMapper;
 import com.example.mycommunity.model.User;
 import com.example.mycommunity.provider.GithubProvider;
-import okhttp3.Response;
+import com.example.mycommunity.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -31,6 +31,8 @@ public class AuthorizeController {
     @Value("${github.client.secret}")
     private String clientSecret;
     @Autowired
+    UserService userService;
+    @Autowired
     UserMapper userMapper;
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
@@ -51,15 +53,21 @@ public class AuthorizeController {
             user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());
-            user.setGmtModified(System.currentTimeMillis());
             user.setAvatarUrl(githubUser.getAvatar_url());
-            userMapper.insert(user);
-            //登录成功，写入cookie和session
+            userService.createOrUpdate(user);
             response.addCookie(new Cookie("token",token));
             return "redirect:/";
         }else {
             return "redirect:/";
         }
+    }
+    @GetMapping(value = "logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response){
+        request.removeAttribute("user");
+        Cookie cookie=new Cookie("token",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }
