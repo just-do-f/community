@@ -3,16 +3,19 @@ package com.example.mycommunity.exception;
 /**
  * Create by czl on 2021/7/9 15:00
  */
-public class CustumizeException extends RuntimeException{
+public class CustomizeException extends RuntimeException{
     private  String message;
-    public CustumizeException(ICustomizeErrorCode errorCode){
+    private Integer code;
+    public CustomizeException(ICustomizeErrorCode errorCode){
+        this.code=errorCode.getCode();
         this.message=errorCode.getMessage();
-    }
-    public CustumizeException(String message){
-        this.message=message;
     }
     @Override
     public String getMessage() {
         return message;
+    }
+
+    public Integer getCode() {
+        return code;
     }
 }

@@ -3,7 +3,7 @@ package com.example.mycommunity.service;
 import com.example.mycommunity.dto.PaginationDTO;
 import com.example.mycommunity.dto.QuestionDTO;
 import com.example.mycommunity.exception.CustomizeErrorCode;
-import com.example.mycommunity.exception.CustumizeException;
+import com.example.mycommunity.exception.CustomizeException;
 import com.example.mycommunity.mapper.QuestionExrMapper;
 import com.example.mycommunity.mapper.QuestionMapper;
 import com.example.mycommunity.mapper.UserMapper;
@@ -61,7 +61,7 @@ public class QuestionService {
         paginationDTO.setQuestioons(questionDTOList);
         return paginationDTO;
     }
-    public  PaginationDTO listByUserId(Integer userId,Integer page,Integer size){
+    public  PaginationDTO listByUserId(Long userId,Integer page,Integer size){
         PaginationDTO paginationDTO=new PaginationDTO();
         Integer totalPage;
         QuestionExample questionExample=new QuestionExample();
@@ -96,10 +96,10 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(Long id) {
         Question question=questionMapper.selectByPrimaryKey(id);
         if(question==null){
-            throw new CustumizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
         QuestionDTO questionDTO=new QuestionDTO();
         BeanUtils.copyProperties(question,questionDTO);
@@ -112,6 +112,9 @@ public class QuestionService {
         if(question.getId()==null){
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(System.currentTimeMillis());
+            question.setViewCount(0);
+            question.setLikeCount(0);
+            question.setCommentCount(0);
             questionMapper.insert(question);
         }else {
             Question updateQuestion=new Question();
@@ -123,12 +126,12 @@ public class QuestionService {
             example.createCriteria().andIdEqualTo(question.getId());
             int updated=questionMapper.updateByExampleSelective(updateQuestion,example);
             if(updated!=1){
-                throw new CustumizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
     }
 
-    public void incView(Integer id) {
+    public void incView(Long id) {
         Question question=new Question();
         question.setId(id);
         question.setViewCount(1);

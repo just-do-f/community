@@ -7,4 +7,5 @@ import com.example.mycommunity.model.Question;
  */
 public interface QuestionExrMapper {
     int incView(Question record);
+    int incCommentCount(Question record);
 }
