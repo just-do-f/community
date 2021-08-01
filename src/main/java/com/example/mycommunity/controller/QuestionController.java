@@ -1,8 +1,8 @@
 package com.example.mycommunity.controller;
 
-import com.example.mycommunity.dto.CommentCreateDTO;
 import com.example.mycommunity.dto.CommentDTO;
 import com.example.mycommunity.dto.QuestionDTO;
+import com.example.mycommunity.enums.CommentTypeEnum;
 import com.example.mycommunity.service.CommentService;
 import com.example.mycommunity.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ import java.util.List;
  * Create by czl on 2021/7/8 18:53
  */
 @Controller
-public class QuetsionController {
+public class QuestionController {
     @Autowired
     private QuestionService questionService;
     @Autowired
@@ -26,7 +26,7 @@ public class QuetsionController {
     public String question(@PathVariable(name = "id") Long id,
                            Model model){
         QuestionDTO questionDTO=questionService.getById(id);
-        List<CommentDTO> comments=commentService.listByQuestionId(id);
+        List<CommentDTO> comments=commentService.listByTargetId(id, CommentTypeEnum.QUESTION);
 
         questionService.incView(id);
         model.addAttribute("question",questionDTO);
