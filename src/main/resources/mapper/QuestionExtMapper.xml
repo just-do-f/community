@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.mycommunity.mapper.QuestionExrMapper">
+<mapper namespace="com.example.mycommunity.mapper.QuestionExtMapper">
     <resultMap id="BaseResultMap" type="com.example.mycommunity.model.Question">
         <id column="id" jdbcType="INTEGER" property="id" />
         <result column="title" jdbcType="VARCHAR" property="title" />
@@ -18,7 +18,8 @@
         view_count = view_count+#{viewCount,jdbcType=INTEGER}
         where id=#{id}
 
-    </update><update id="incCommentCount" parameterType="com.example.mycommunity.model.Question">
+    </update>
+    <update id="incCommentCount" parameterType="com.example.mycommunity.model.Question">
         update question
         set
         comment_count = comment_count+#{commentCount,jdbcType=INTEGER}

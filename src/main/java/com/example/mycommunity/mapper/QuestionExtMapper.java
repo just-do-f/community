@@ -5,7 +5,7 @@ import com.example.mycommunity.model.Question;
 /**
  * Create by czl on 2021/7/9 16:32
  */
-public interface QuestionExrMapper {
+public interface QuestionExtMapper {
     int incView(Question record);
     int incCommentCount(Question record);
 }

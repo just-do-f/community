@@ -4,7 +4,7 @@ import com.example.mycommunity.dto.PaginationDTO;
 import com.example.mycommunity.dto.QuestionDTO;
 import com.example.mycommunity.exception.CustomizeErrorCode;
 import com.example.mycommunity.exception.CustomizeException;
-import com.example.mycommunity.mapper.QuestionExrMapper;
+import com.example.mycommunity.mapper.QuestionExtMapper;
 import com.example.mycommunity.mapper.QuestionMapper;
 import com.example.mycommunity.mapper.UserMapper;
 import com.example.mycommunity.model.Question;
@@ -27,7 +27,7 @@ public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
     @Autowired
-    private QuestionExrMapper questionExrMapper;
+    private QuestionExtMapper questionExtMapper;
 
     public PaginationDTO list(Integer page, Integer size) {
         PaginationDTO paginationDTO=new PaginationDTO();
@@ -135,6 +135,6 @@ public class QuestionService {
         Question question=new Question();
         question.setId(id);
         question.setViewCount(1);
-        questionExrMapper.incView(question);
+        questionExtMapper.incView(question);
     }
 }
