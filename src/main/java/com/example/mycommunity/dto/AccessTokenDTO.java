@@ -3,7 +3,7 @@ package com.example.mycommunity.dto;
 import lombok.Data;
 
 /**
- * Create by czl on 2021/06/19
+ * Created by codedrinker on 2019/4/24.
  */
 @Data
 public class AccessTokenDTO {
@@ -11,4 +11,5 @@ public class AccessTokenDTO {
     private String client_secret;
     private String code;
     private String redirect_uri;
+    private String state;
 }

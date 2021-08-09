@@ -4,7 +4,7 @@ import com.example.mycommunity.model.User;
 import lombok.Data;
 
 /**
- * Create by czl on 2021/6/20 16:39
+ * Created by codedrinker on 2019/5/7.
  */
 @Data
 public class QuestionDTO {
@@ -13,10 +13,11 @@ public class QuestionDTO {
     private String description;
     private String tag;
     private Long gmtCreate;
-    private Long mgtModified;
+    private Long gmtModified;
     private Long creator;
     private Integer viewCount;
     private Integer commentCount;
-    private Integer linkCount;
+    private Integer likeCount;
     private User user;
+    private Integer sticky;
 }

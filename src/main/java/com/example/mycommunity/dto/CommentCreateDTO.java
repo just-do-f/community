@@ -3,7 +3,7 @@ package com.example.mycommunity.dto;
 import lombok.Data;
 
 /**
- * Create by czl on 2021/7/9 17:00
+ * Created by codedrinker on 2019/5/30.
  */
 @Data
 public class CommentCreateDTO {

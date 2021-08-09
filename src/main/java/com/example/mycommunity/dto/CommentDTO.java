@@ -4,7 +4,7 @@ import com.example.mycommunity.model.User;
 import lombok.Data;
 
 /**
- * Create by czl on 2021/7/11 20:25
+ * Created by codedrinker on 2019/6/2.
  */
 @Data
 public class CommentDTO {
@@ -15,7 +15,7 @@ public class CommentDTO {
     private Long gmtCreate;
     private Long gmtModified;
     private Long likeCount;
+    private Integer commentCount;
     private String content;
     private User user;
-    private Integer commentCount;
 }

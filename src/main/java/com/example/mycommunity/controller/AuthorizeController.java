@@ -6,6 +6,7 @@ import com.example.mycommunity.mapper.UserMapper;
 import com.example.mycommunity.model.User;
 import com.example.mycommunity.provider.GithubProvider;
 import com.example.mycommunity.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import java.util.UUID;
  * Create by czl on 2021/06/19
  */
 @Controller
+@Slf4j
 public class AuthorizeController {
     @Autowired
     GithubProvider githubProvider;
@@ -31,41 +33,53 @@ public class AuthorizeController {
     @Value("${github.client.secret}")
     private String clientSecret;
     @Autowired
-    UserService userService;
-    @Autowired
-    UserMapper userMapper;
+    private UserService userService;
+
+    //@Autowired
+    //private UFileService uFileService;
+
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
                            HttpServletResponse response) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
-        accessTokenDTO.setCode(code);
         accessTokenDTO.setClient_id(clientId);
-        accessTokenDTO.setRedirect_uri(redirectUri);
         accessTokenDTO.setClient_secret(clientSecret);
+        accessTokenDTO.setCode(code);
+        accessTokenDTO.setRedirect_uri(redirectUri);
+        accessTokenDTO.setState(state);
         String accessToken = githubProvider.getAccessToken(accessTokenDTO);
-        System.out.println("accessToken为" + accessToken);
         GithubUser githubUser = githubProvider.getUser(accessToken);
-        //System.out.println("姓名为" + user.getName());
-        if(githubUser!=null&&githubUser.getId()!=null){
+        if (githubUser != null && githubUser.getId() != null) {
             User user = new User();
-            String token=UUID.randomUUID().toString();
+            String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setAvatarUrl(githubUser.getAvatar_url());
+            //UFileResult fileResult = null;
+            try {
+                // fileResult = uFileService.upload(githubUser.getAvatarUrl());
+                //user.setAvatarUrl(fileResult.getFileUrl());
+            } catch (Exception e) {
+                user.setAvatarUrl(githubUser.getAvatarUrl());
+            }
             userService.createOrUpdate(user);
-            response.addCookie(new Cookie("token",token));
+            Cookie cookie = new Cookie("token", token);
+            cookie.setMaxAge(60 * 60 * 24 * 30 * 6);
+            response.addCookie(cookie);
             return "redirect:/";
-        }else {
+        } else {
+            log.error("callback get github error,{}", githubUser);
+            // 登录失败，重新登录
             return "redirect:/";
         }
     }
-    @GetMapping(value = "logout")
+
+    @GetMapping("/logout")
     public String logout(HttpServletRequest request,
-                         HttpServletResponse response){
-        request.removeAttribute("user");
-        Cookie cookie=new Cookie("token",null);
+                         HttpServletResponse response) {
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token", null);
         cookie.setMaxAge(0);
         response.addCookie(cookie);
         return "redirect:/";
