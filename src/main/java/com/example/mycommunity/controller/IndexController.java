@@ -1,5 +1,6 @@
 package com.example.mycommunity.controller;
 
+import com.example.mycommunity.cache.HotTagCache;
 import com.example.mycommunity.dto.PaginationDTO;
 import com.example.mycommunity.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
 package com.example.mycommunity.service;
 
+import com.example.mycommunity.cache.QuestionCache;
 import com.example.mycommunity.dto.PaginationDTO;
 import com.example.mycommunity.dto.QuestionDTO;
 import com.example.mycommunity.dto.QuestionQueryDTO;
